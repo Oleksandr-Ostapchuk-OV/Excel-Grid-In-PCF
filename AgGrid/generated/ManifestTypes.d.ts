@@ -4,13 +4,13 @@
 
 // Define IInputs and IOutputs Type. They should match with ControlManifest.
 export interface IInputs {
-    ApiUrl: ComponentFramework.PropertyTypes.StringProperty;
+    inputData: ComponentFramework.PropertyTypes.StringProperty;
     enableRowGroupColumns: ComponentFramework.PropertyTypes.StringProperty;
     pivotColumns: ComponentFramework.PropertyTypes.StringProperty;
     aggFuncColumns: ComponentFramework.PropertyTypes.StringProperty;
 }
 export interface IOutputs {
-    ApiUrl?: string;
+    inputData?: string;
     enableRowGroupColumns?: string;
     pivotColumns?: string;
     aggFuncColumns?: string;

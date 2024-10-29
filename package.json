@@ -16,6 +16,7 @@
     "@ag-grid-community/client-side-row-model": "^31.1.1",
     "@ag-grid-community/react": "^31.1.1",
     "@ag-grid-community/styles": "^31.0.3",
+    "@azure/msal-browser": "^3.26.1",
     "ag-grid-community": "^31.0.3",
     "ag-grid-enterprise": "^31.0.3",
     "ag-grid-react": "^31.0.3",

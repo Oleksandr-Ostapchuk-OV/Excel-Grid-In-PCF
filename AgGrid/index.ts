@@ -7,7 +7,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     public width: number;
     public height: number;
     private con: HTMLDivElement;
-    private apiUrl: string | null;
+    private inputData: string | null;
     private enableRowGroupColumns: string | null;
     private pivotColumns: string | null;
     private aggFuncColumns: string | null;
@@ -29,12 +29,13 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     public init(context: ComponentFramework.Context<IInputs>, notifyOutputChanged: () => void, state: ComponentFramework.Dictionary, container: HTMLDivElement): void {
         // Add control initialization code
         // Add control initialization code
+        
         this.con = container;
 
         const height = context.mode.allocatedHeight;
         const width = context.mode.allocatedWidth;
 
-        this.apiUrl = context.parameters.ApiUrl.raw;
+        this.inputData = context.parameters.inputData.raw;
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
         this.pivotColumns = context.parameters.pivotColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
@@ -46,12 +47,12 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
-        this.apiUrl = context.parameters.ApiUrl.raw;
+        this.inputData = context.parameters.inputData.raw;
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
         this.pivotColumns = context.parameters.pivotColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
         ReactDOM.render(
-            React.createElement(MyAgGrid, {apiUrl : this.apiUrl,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns}),
+            React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns}),
             // React.createElement(MyAgGrid, {apiUrl : this.apiUrl}),
             this.con
             );

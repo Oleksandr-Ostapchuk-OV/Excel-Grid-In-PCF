@@ -14,7 +14,7 @@
           "build/Microsoft.NETFramework.ReferenceAssemblies.net462.targets": {}
         }
       },
-      "Microsoft.PowerApps.MSBuild.Pcf/1.31.2": {
+      "Microsoft.PowerApps.MSBuild.Pcf/1.35.1": {
         "type": "package",
         "build": {
           "build/Microsoft.PowerApps.MSBuild.Pcf.props": {},
@@ -362,10 +362,10 @@
         "microsoft.netframework.referenceassemblies.net462.nuspec"
       ]
     },
-    "Microsoft.PowerApps.MSBuild.Pcf/1.31.2": {
-      "sha512": "UzimaMndqFUIByzVFAOWW6NT+iUAYmEzvIRhNChULxgT5GT7jTi1ni4kUtSRNVP46xH70qBJo5GaRvP2rs5Omw==",
+    "Microsoft.PowerApps.MSBuild.Pcf/1.35.1": {
+      "sha512": "54L0JXuB6VH0eu8npqCYPkmk9FD3ILh7edgy8cJapiQ7h3/GPfDiaZo1lH7le8vUYcaMrAK2+uZsZXL9/TMCBA==",
       "type": "package",
-      "path": "microsoft.powerapps.msbuild.pcf/1.31.2",
+      "path": "microsoft.powerapps.msbuild.pcf/1.35.1",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -373,7 +373,7 @@
         "LICENSE.txt",
         "build/Microsoft.PowerApps.MSBuild.Pcf.props",
         "build/Microsoft.PowerApps.MSBuild.Pcf.targets",
-        "microsoft.powerapps.msbuild.pcf.1.31.2.nupkg.sha512",
+        "microsoft.powerapps.msbuild.pcf.1.35.1.nupkg.sha512",
         "microsoft.powerapps.msbuild.pcf.nuspec",
         "tasks/Microsoft.PowerApps.MSBuild.Pcf.tasks",
         "tasks/net472/Microsoft.PowerPlatform.MSBuild.Telemetry.Tasks.dll",
@@ -449,9 +449,7 @@
         "tasks/net6.0/ppbtTelemetryRecorder/ppbtTelemetryRecorder.pdb",
         "tasks/net6.0/ppbtTelemetryRecorder/ppbtTelemetryRecorder.runtimeconfig.json",
         "tasks/net6.0/ppbtTelemetryRecorder/runtimes/browser/lib/net6.0/System.Text.Encodings.Web.dll",
-        "tasks/net6.0/runtimes/unix/lib/netcoreapp3.0/System.Drawing.Common.dll",
-        "tasks/net6.0/runtimes/win/lib/netcoreapp3.0/Microsoft.Win32.SystemEvents.dll",
-        "tasks/net6.0/runtimes/win/lib/netcoreapp3.0/System.Drawing.Common.dll"
+        "tasks/net6.0/runtimes/win/lib/net6.0/Microsoft.Win32.SystemEvents.dll"
       ]
     }
   },
@@ -462,26 +460,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\joshi.dixit\\.nuget\\packages\\": {}
+    "C:\\Users\\Gabe\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\pcfaggrid.pcfproj",
+      "projectUniqueName": "C:\\Work\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
       "projectName": "pcfaggrid",
-      "projectPath": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\pcfaggrid.pcfproj",
-      "packagesPath": "C:\\Users\\joshi.dixit\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\obj\\",
+      "projectPath": "C:\\Work\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
+      "packagesPath": "C:\\Users\\Gabe\\.nuget\\packages\\",
+      "outputPath": "C:\\Work\\Excel-Grid-In-PCF\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\joshi.dixit\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "C:\\Users\\Gabe\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net462"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -489,6 +485,11 @@
           "targetAlias": "net462",
           "projectReferences": {}
         }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
       }
     },
     "frameworks": {

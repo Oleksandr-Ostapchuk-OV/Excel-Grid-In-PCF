@@ -1,27 +1,25 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\Solutions\\Solutions.cdsproj": {}
+    "C:\\Work\\Excel-Grid-In-PCF\\Solutions\\Solutions.cdsproj": {}
   },
   "projects": {
-    "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\pcfaggrid.pcfproj": {
+    "C:\\Work\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\pcfaggrid.pcfproj",
+        "projectUniqueName": "C:\\Work\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
         "projectName": "pcfaggrid",
-        "projectPath": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\pcfaggrid.pcfproj",
-        "packagesPath": "C:\\Users\\joshi.dixit\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\obj\\",
+        "projectPath": "C:\\Work\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
+        "packagesPath": "C:\\Users\\Gabe\\.nuget\\packages\\",
+        "outputPath": "C:\\Work\\Excel-Grid-In-PCF\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\joshi.dixit\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Gabe\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net462"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -29,6 +27,11 @@
             "targetAlias": "net462",
             "projectReferences": {}
           }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {
@@ -48,35 +51,38 @@
         }
       }
     },
-    "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\Solutions\\Solutions.cdsproj": {
+    "C:\\Work\\Excel-Grid-In-PCF\\Solutions\\Solutions.cdsproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\Solutions\\Solutions.cdsproj",
+        "projectUniqueName": "C:\\Work\\Excel-Grid-In-PCF\\Solutions\\Solutions.cdsproj",
         "projectName": "Solutions",
-        "projectPath": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\Solutions\\Solutions.cdsproj",
-        "packagesPath": "C:\\Users\\joshi.dixit\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\Solutions\\obj\\",
+        "projectPath": "C:\\Work\\Excel-Grid-In-PCF\\Solutions\\Solutions.cdsproj",
+        "packagesPath": "C:\\Users\\Gabe\\.nuget\\packages\\",
+        "outputPath": "C:\\Work\\Excel-Grid-In-PCF\\Solutions\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\joshi.dixit\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+          "C:\\Users\\Gabe\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net462"
         ],
         "sources": {
-          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
           "net462": {
             "targetAlias": "net462",
             "projectReferences": {
-              "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\pcfaggrid.pcfproj": {
-                "projectPath": "C:\\Users\\joshi.dixit\\Desktop\\pcfaggrid\\pcfaggrid.pcfproj"
+              "C:\\Work\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj": {
+                "projectPath": "C:\\Work\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj"
               }
             }
           }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
         }
       },
       "frameworks": {

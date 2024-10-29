@@ -1,8 +1,9 @@
 /*
  * MyAgGridComponent.tsx
- * Description: React component for displaying data using Ag Grid in TypeScript
+ * Description: React component for displaying data using Ag Grid in TypeScript - Modified for OVV account reconciliation uses
  * Author: Dixit Joshi
- * Version: 1.2.0
+ * Modified by: Gabe Williams
+ * Version: 1.2.0.1
  * License: MIT
  */
 
@@ -16,15 +17,16 @@ import 'ag-grid-enterprise';
 import Theme from './Theme';
 import {option} from './Theme';
 import '../css/grid.css'
+import { IInputs } from '../generated/ManifestTypes';
 
 interface MyAgGridProps {
-    apiUrl: string | null;
+    inputData: string | null;
     enableRowGroupColumns: string | null;
     pivotColumns: string | null;
     aggFuncColumns: string | null;
 }
 
-const AgGrid: React.FC<MyAgGridProps> = React.memo(({ apiUrl, enableRowGroupColumns, pivotColumns, aggFuncColumns }) => {
+const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns}) => {
     console.log('AG Grid')
     const [divClass, setDivClass] = useState('ag-theme-alpine');
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -33,11 +35,17 @@ const AgGrid: React.FC<MyAgGridProps> = React.memo(({ apiUrl, enableRowGroupColu
     const [columnDefs, setColumnDefs] = useState([]);
     useEffect(() => {
         const fetchData = async () => {
-            let data;
+            let data: any = [];
+            if (inputData) {
+                try {
+                    data = JSON.parse(inputData);
+                }catch(error) {
+                    console.error('Error parsing collection data:', error);
+                }
+            }
             // const response = await fetch('https://www.ag-grid.com/example-assets/olympic-winners.json');
             try {
-                const response = await fetch(`${apiUrl}`);
-                data = await response.json();
+                //const response = await fetch(`${apiUrl}`);
                 setRowData(data);
             } catch (error) {
                 setRowData([]);
@@ -63,7 +71,7 @@ const AgGrid: React.FC<MyAgGridProps> = React.memo(({ apiUrl, enableRowGroupColu
         }
         fetchData();
 
-    }, [apiUrl, enableRowGroupColumns, pivotColumns, aggFuncColumns])
+    }, [inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns])
     const autoGroupColumnDef = useMemo(() => {
         return {
             minWidth: 270,

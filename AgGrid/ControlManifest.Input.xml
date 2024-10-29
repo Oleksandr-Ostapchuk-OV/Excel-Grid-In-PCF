@@ -18,7 +18,7 @@
       -->
     </external-service-usage>
     <!-- property node identifies a specific, configurable piece of data that the control expects from CDS -->
-    <property name="ApiUrl" display-name-key="Property_Display_Key" description-key="Property_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
+    <property name="inputData" display-name-key="Input_Data" description-key="Input_Data" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="enableRowGroupColumns" display-name-key="enableRowGroupColumns_Key" description-key="enableRowGroupColumns_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="pivotColumns" display-name-key="pivotColumns_Key" description-key="pivotColumns_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
     <property name="aggFuncColumns" display-name-key="aggFuncColumns_Key" description-key="aggFuncColumns_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true" />
