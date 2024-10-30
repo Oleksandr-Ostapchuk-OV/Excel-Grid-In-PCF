@@ -1,5 +1,5 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
-import MyAgGrid from './components/AgGrid'
+import ReGrid from './components/AgGrid'
 import React, { useMemo } from "react";
 import ReactDOM from "react-dom";
 
@@ -8,9 +8,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     public height: number;
     private con: HTMLDivElement;
     private inputData: string | null;
-    private enableRowGroupColumns: string | null;
-    private pivotColumns: string | null;
-    private aggFuncColumns: string | null;
+
     /**
      * Empty constructor.
      */
@@ -36,9 +34,6 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         const width = context.mode.allocatedWidth;
 
         this.inputData = context.parameters.inputData.raw;
-        this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
-        this.pivotColumns = context.parameters.pivotColumns.raw;
-        this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
     }
 
 
@@ -48,11 +43,8 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         this.inputData = context.parameters.inputData.raw;
-        this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
-        this.pivotColumns = context.parameters.pivotColumns.raw;
-        this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
         ReactDOM.render(
-            React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns}),
+            React.createElement(ReGrid, {inputData : this.inputData}),
             // React.createElement(MyAgGrid, {apiUrl : this.apiUrl}),
             this.con
             );

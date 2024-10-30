@@ -1,20 +1,19 @@
-2024-10-28 22:40:33.548 - Info	
+2024-10-29 22:57:32.351 - Info	
 Packing C:\Work\Excel-Grid-In-PCF\Solutions\obj\Debug\Metadata to bin\Debug\Solutions.zip
 
-2024-10-28 22:40:33.559 - Info	Processing Component: Entities
-2024-10-28 22:40:33.560 - Info	Processing Component: Roles
-2024-10-28 22:40:33.561 - Info	Processing Component: Workflows
-2024-10-28 22:40:33.562 - Info	Processing Component: FieldSecurityProfiles
-2024-10-28 22:40:33.562 - Info	Processing Component: Templates
-2024-10-28 22:40:33.562 - Info	Processing Component: EntityMaps
-2024-10-28 22:40:33.562 - Info	Processing Component: EntityRelationships
-2024-10-28 22:40:33.570 - Info	Processing Component: OrganizationSettings
-2024-10-28 22:40:33.570 - Info	Processing Component: optionsets
-2024-10-28 22:40:33.571 - Info	Processing Component: CustomControls
-2024-10-28 22:40:33.574 - Info	 - AgGrid.AgGrid
-2024-10-28 22:40:33.596 - Info	Processing Component: SolutionPluginAssemblies
-2024-10-28 22:40:33.597 - Info	Processing Component: EntityDataProviders
-2024-10-28 22:40:33.599 - Info	Processing Sharded Component Files
-2024-10-28 22:40:33.698 - Info	
+2024-10-29 22:57:32.372 - Info	Processing Component: Entities
+2024-10-29 22:57:32.374 - Info	Processing Component: Roles
+2024-10-29 22:57:32.376 - Info	Processing Component: Workflows
+2024-10-29 22:57:32.377 - Info	Processing Component: FieldSecurityProfiles
+2024-10-29 22:57:32.377 - Info	Processing Component: Templates
+2024-10-29 22:57:32.378 - Info	Processing Component: EntityMaps
+2024-10-29 22:57:32.378 - Info	Processing Component: EntityRelationships
+2024-10-29 22:57:32.400 - Info	Processing Component: OrganizationSettings
+2024-10-29 22:57:32.401 - Info	Processing Component: optionsets
+2024-10-29 22:57:32.401 - Info	Processing Component: CustomControls
+2024-10-29 22:57:32.404 - Info	Processing Component: SolutionPluginAssemblies
+2024-10-29 22:57:32.404 - Info	Processing Component: EntityDataProviders
+2024-10-29 22:57:32.408 - Info	Processing Sharded Component Files
+2024-10-29 22:57:32.423 - Info	
 Unmanaged Pack complete.
 

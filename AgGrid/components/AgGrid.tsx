@@ -1,38 +1,31 @@
 /*
  * MyAgGridComponent.tsx
- * Description: React component for displaying data using Ag Grid in TypeScript - Modified for OVV account reconciliation uses
- * Author: Dixit Joshi
- * Modified by: Gabe Williams
- * Version: 1.2.0.1
+ * Description: React component for displaying data using React Grid in TypeScript for account rec purposes
+ * Author: Gabe Williams
+ * Version: 1.0.0.
  * License: MIT
  */
 
 import React, { useState, useEffect, useMemo} from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css'; // Core CSS
-import 'ag-grid-community/styles/ag-theme-quartz.css'; // Theme CSS
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-import 'ag-grid-community/styles/ag-theme-balham.css';
-import 'ag-grid-enterprise';
+import {ReactGrid, Column, Row, CellChange, TextCell, NumberCell} from '@silevis/reactgrid'
+import '@silevis/reactgrid/styles.css' // Core CSS
 import Theme from './Theme';
 import {option} from './Theme';
 import '../css/grid.css'
-import { IInputs } from '../generated/ManifestTypes';
 
-interface MyAgGridProps {
+interface ReGridProps {
     inputData: string | null;
-    enableRowGroupColumns: string | null;
-    pivotColumns: string | null;
-    aggFuncColumns: string | null;
 }
 
-const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns}) => {
-    console.log('AG Grid')
+const ReGrid: React.FC<ReGridProps> = React.memo(({ inputData }) => {
+    console.log('ReactGrid Componment')
+    
     const [divClass, setDivClass] = useState('ag-theme-alpine');
     const [selectedOption, setSelectedOption] = useState<string>('');
-    const [rowData, setRowData] = useState<any[]>([]);
-    const [autoDefName, setAutoDefName] = useState("athlete");
-    const [columnDefs, setColumnDefs] = useState([]);
+    const [columns, setColumns] = useState<Column[]>([]);
+    const [rows, setRows] = useState<Row[]>([]);
+    
     useEffect(() => {
         const fetchData = async () => {
             let data: any = [];
@@ -43,91 +36,98 @@ const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupC
                     console.error('Error parsing collection data:', error);
                 }
             }
-            // const response = await fetch('https://www.ag-grid.com/example-assets/olympic-winners.json');
-            try {
-                //const response = await fetch(`${apiUrl}`);
-                setRowData(data);
-            } catch (error) {
-                setRowData([]);
-                console.log('error')
-            }
 
             if (data && data.length > 0) {
                 const headers = Object.keys(data[0]);
-                setAutoDefName(headers[0]);
 
-                const enableRowGroup: string[] = enableRowGroupColumns?.split(";") || [];
-                const enablePivot: string[] = pivotColumns?.split(";") || [];
-                const aggFunc: string[] = aggFuncColumns?.split(";") || [];
-
-                const dynamicColumnDefs: any = headers.map(header => ({
-                    field: header,
-                    enableRowGroup: enableRowGroup.includes(header),
-                    enablePivot: enablePivot.includes(header),
-                    aggFunc: aggFunc.includes(header) ? 'sum' : null,
+                const dynamicColumns: Column[] = headers.map(header => ({
+                    columnId: header,
+                    width: 150,
                 }));
-                setColumnDefs(dynamicColumnDefs);
+                setColumns(dynamicColumns);
+
+                const headerRow: Row = {
+                    rowId: 'header',
+                    cells: headers.map(header => ({
+                        type: 'header',
+                        text: header,
+                    })),
+                };
+
+                const dynamicRows: Row[] = data.map((row: { [x: string]: any; }, rowIndex: { toString: () => any; }) => ({
+                    rowId: rowIndex.toString(),
+                    cells: headers.map(header => {
+                        const value = row[header];
+                        return typeof value === "number"
+                            ? { type: "number", value } as NumberCell
+                            : { type: "text", text: value?.toString() || "" } as TextCell;
+                    }),
+                }));
+                const allRows: Row[] = [headerRow, ...dynamicRows];
+                setRows(allRows);
             }
-        }
+        };
         fetchData();
 
-    }, [inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns])
-    const autoGroupColumnDef = useMemo(() => {
-        return {
-            minWidth: 270,
-            field: autoDefName,
-            headerCheckboxSelection: true,
-            cellRendererParams: {
-                checkbox: true,
-            },
-        };
-    }, [autoDefName]);
-
-    const gridOptions = {
-        sideBar: true,
-        columnDefs: columnDefs,
-        suppressAggFuncInHeader: true,
-        defaultColDef: {
-            flex: 1,
-            minWidth: 150,
-            filter: true,
-            floatingFilter: true,
-            resizable: true,
-            editable: true,
-        },
-        enableRangeSelection: true,
-        statusBar: {
-            statusPanels: [
-                { statusPanel: 'agTotalAndFilteredRowCountComponent', align: 'left' },
-                { statusPanel: 'agTotalRowCountComponent', align: 'center' },
-                { statusPanel: 'agFilteredRowCountComponent' },
-                { statusPanel: 'agSelectedRowCountComponent' },
-                { statusPanel: 'agAggregationComponent' },
-            ]
-        },
-    };
+    }, [inputData])
+    
     const handleThemeChange = (selectedOption: string) => {
         setSelectedOption(selectedOption)
         setDivClass(selectedOption);
     };
 
+    
+    const onCellsChanged = (changes: CellChange[]) => {
+        // Update the rows based on the cell changes
+        setRows((prevRows) => {
+            return prevRows.map(row => {
+                // Check if the rowId in the changes matches the current rowId
+                const change = changes.find(c => c.rowId === row.rowId);
+                console.log('change:', change?.rowId, 'rowID:', row.rowId)
+                console.log('prevRows:', prevRows)
+                
+                if (change) {
+                    // Update the specific cell that was changed
+                    return {
+                        ...row,
+                        cells: row.cells.map((cell, index) => {
+                            // Check if the cell columnId matches
+                            const header = columns[index].columnId;
+                            console.log(header)
+                            if (header === change.columnId) {
+                                // Depending on the cell type, update accordingly
+                                if (cell.type === 'number') {
+                                    return {
+                                        type: 'number',
+                                        value: (change.newCell as NumberCell).value // Update with new value
+                                    } as NumberCell;
+                                } else {
+                                    return {
+                                        type: 'text',
+                                        text: (change.newCell as TextCell).text // Update with new text
+                                    } as TextCell;
+                                }
+                            }
+                            return cell; // Return unchanged cell
+                        }),
+                    };
+                }
+                return row; // Return unchanged row if no change for this row
+            });
+        });
+    }; 
+
     return (
         <div className={divClass} style={{ width: '100%', height: '80vh' }}>
             <Theme options={option} onSelect={handleThemeChange} />
-            < AgGridReact
-                rowData={rowData}
-                columnDefs={columnDefs}
-                autoGroupColumnDef={autoGroupColumnDef}
-                gridOptions={gridOptions}
-                rowGroupPanelShow='always'
-                pagination={true}
-                rowSelection={'multiple'}
-                groupSelectsChildren={true}
-                pivotPanelShow='always'
-                tooltipShowDelay={500}
+            < ReactGrid
+                rows={rows}
+                columns={columns}
+                onCellsChanged={onCellsChanged}
+                enableRangeSelection={true}
             />
         </div>
     );
 });
 
-export default AgGrid;
+export default ReGrid;
