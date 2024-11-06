@@ -13,6 +13,6 @@
     <SourceRoot Include="C:\Users\Gabe\.nuget\packages\" />
   </ItemGroup>
   <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)microsoft.powerapps.msbuild.solution\1.35.1\build\Microsoft.PowerApps.MSBuild.Solution.props" Condition="Exists('$(NuGetPackageRoot)microsoft.powerapps.msbuild.solution\1.35.1\build\Microsoft.PowerApps.MSBuild.Solution.props')" />
+    <Import Project="$(NuGetPackageRoot)microsoft.powerapps.msbuild.solution\1.36.3\build\Microsoft.PowerApps.MSBuild.Solution.props" Condition="Exists('$(NuGetPackageRoot)microsoft.powerapps.msbuild.solution\1.36.3\build\Microsoft.PowerApps.MSBuild.Solution.props')" />
   </ImportGroup>
 </Project>

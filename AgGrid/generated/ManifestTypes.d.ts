@@ -8,10 +8,12 @@ export interface IInputs {
     enableRowGroupColumns: ComponentFramework.PropertyTypes.StringProperty;
     pivotColumns: ComponentFramework.PropertyTypes.StringProperty;
     aggFuncColumns: ComponentFramework.PropertyTypes.StringProperty;
+    jsonData: ComponentFramework.PropertyTypes.StringProperty;
 }
 export interface IOutputs {
     inputData?: string;
     enableRowGroupColumns?: string;
     pivotColumns?: string;
     aggFuncColumns?: string;
+    jsonData?: string;
 }

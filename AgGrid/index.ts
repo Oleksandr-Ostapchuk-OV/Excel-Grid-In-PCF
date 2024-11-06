@@ -11,6 +11,8 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     private enableRowGroupColumns: string | null;
     private pivotColumns: string | null;
     private aggFuncColumns: string | null;
+    private notifyOutputChanged: () => void;
+    private jsonData: any[] = [];
     /**
      * Empty constructor.
      */
@@ -39,6 +41,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
         this.pivotColumns = context.parameters.pivotColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
+        this.notifyOutputChanged = notifyOutputChanged;
     }
 
 
@@ -51,8 +54,13 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
         this.pivotColumns = context.parameters.pivotColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
+        const onDataChange = (data: any) => {
+            this.jsonData = data;
+            this.notifyOutputChanged();
+        }
+
         ReactDOM.render(
-            React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns}),
+            React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns, onDataChange: onDataChange}),
             // React.createElement(MyAgGrid, {apiUrl : this.apiUrl}),
             this.con
             );
@@ -63,7 +71,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
      * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
      */
     public getOutputs(): IOutputs {
-        return {};
+        return {jsonData: JSON.stringify(this.jsonData)};
     }
 
     /**

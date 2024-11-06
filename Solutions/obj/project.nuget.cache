@@ -1,13 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "Le4j0XsZP2M=",
+  "dgSpecHash": "YqBHBbkrbcU=",
   "success": true,
   "projectFilePath": "C:\\Work\\Excel-Grid-In-PCF\\Solutions\\Solutions.cdsproj",
   "expectedPackageFiles": [
     "C:\\Users\\Gabe\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
     "C:\\Users\\Gabe\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net462\\1.0.0\\microsoft.netframework.referenceassemblies.net462.1.0.0.nupkg.sha512",
-    "C:\\Users\\Gabe\\.nuget\\packages\\microsoft.powerapps.msbuild.pcf\\1.35.1\\microsoft.powerapps.msbuild.pcf.1.35.1.nupkg.sha512",
-    "C:\\Users\\Gabe\\.nuget\\packages\\microsoft.powerapps.msbuild.solution\\1.35.1\\microsoft.powerapps.msbuild.solution.1.35.1.nupkg.sha512"
+    "C:\\Users\\Gabe\\.nuget\\packages\\microsoft.powerapps.msbuild.solution\\1.36.3\\microsoft.powerapps.msbuild.solution.1.36.3.nupkg.sha512"
   ],
   "logs": []
 }

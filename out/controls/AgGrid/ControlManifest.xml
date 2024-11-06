@@ -6,6 +6,7 @@
     <property name="enableRowGroupColumns" display-name-key="enableRowGroupColumns_Key" description-key="enableRowGroupColumns_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true"/>
     <property name="pivotColumns" display-name-key="pivotColumns_Key" description-key="pivotColumns_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true"/>
     <property name="aggFuncColumns" display-name-key="aggFuncColumns_Key" description-key="aggFuncColumns_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true"/>
+    <property name="jsonData" display-name-key="jsonData" description-key="jsonData" of-type="SingleLine.Text" usage="bound" required="true"/>
     <resources>
       <code path="bundle.js" order="1"/>
     </resources>

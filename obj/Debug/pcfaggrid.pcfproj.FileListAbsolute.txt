@@ -1,2 +1,0 @@
-C:\Work\Excel-Grid-In-PCF\obj\Debug\pcfaggrid.pcfproj.AssemblyReference.cache
-C:\Work\Excel-Grid-In-PCF\obj\Debug\pcfaggrid.pcfproj.CoreCompileInputs.cache
