@@ -1,2 +1,0 @@
-C:\Work\Excel-Grid-In-PCF\Solutions\obj\Debug\Solutions.cdsproj.AssemblyReference.cache
-C:\Work\Excel-Grid-In-PCF\Solutions\obj\Debug\Solutions.cdsproj.CoreCompileInputs.cache

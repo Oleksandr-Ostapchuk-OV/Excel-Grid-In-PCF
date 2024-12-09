@@ -2,6 +2,7 @@ import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import MyAgGrid from './components/AgGrid'
 import React, { useMemo } from "react";
 import ReactDOM from "react-dom";
+import { LicenseManager } from 'ag-grid-enterprise';
 
 export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutputs> {
     public width: number;
@@ -13,6 +14,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     private aggFuncColumns: string | null;
     private notifyOutputChanged: () => void;
     private jsonData: any[] = [];
+    private key: string;
     /**
      * Empty constructor.
      */
@@ -39,9 +41,10 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
 
         this.inputData = context.parameters.inputData.raw;
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
-        this.pivotColumns = context.parameters.pivotColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
         this.notifyOutputChanged = notifyOutputChanged;
+        this.key = context.parameters.key.raw ?? 'defaultKey';
+        LicenseManager.setLicenseKey(this.key);
     }
 
 
@@ -52,8 +55,9 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     public updateView(context: ComponentFramework.Context<IInputs>): void {
         this.inputData = context.parameters.inputData.raw;
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
-        this.pivotColumns = context.parameters.pivotColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
+        this.key = context.parameters.key.raw ?? 'defaultKey';
+        LicenseManager.setLicenseKey(this.key);
         const onDataChange = (data: any) => {
             this.jsonData = data;
             this.notifyOutputChanged();

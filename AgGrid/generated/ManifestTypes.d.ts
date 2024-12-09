@@ -6,14 +6,14 @@
 export interface IInputs {
     inputData: ComponentFramework.PropertyTypes.StringProperty;
     enableRowGroupColumns: ComponentFramework.PropertyTypes.StringProperty;
-    pivotColumns: ComponentFramework.PropertyTypes.StringProperty;
     aggFuncColumns: ComponentFramework.PropertyTypes.StringProperty;
     jsonData: ComponentFramework.PropertyTypes.StringProperty;
+    key: ComponentFramework.PropertyTypes.StringProperty;
 }
 export interface IOutputs {
     inputData?: string;
     enableRowGroupColumns?: string;
-    pivotColumns?: string;
     aggFuncColumns?: string;
     jsonData?: string;
+    key?: string;
 }
