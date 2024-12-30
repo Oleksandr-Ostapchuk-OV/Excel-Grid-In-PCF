@@ -1,7 +1,7 @@
 import { IInputs, IOutputs } from "./generated/ManifestTypes";
 import MyAgGrid from './components/AgGrid'
 import React, { useMemo } from "react";
-import ReactDOM from "react-dom";
+import createRoot from "react-dom";
 import { LicenseManager } from 'ag-grid-enterprise';
 
 export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutputs> {
@@ -63,11 +63,11 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
             this.notifyOutputChanged();
         }
 
-        ReactDOM.render(
+        createRoot.render(
             React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns, onDataChange: onDataChange}),
             // React.createElement(MyAgGrid, {apiUrl : this.apiUrl}),
             this.con
-            );
+        );
     }
 
     /**
@@ -84,6 +84,6 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
      */
     public destroy(): void {
         // Add code to cleanup control if necessary
-        ReactDOM.unmountComponentAtNode(this.con);
+        createRoot.unmountComponentAtNode(this.con);
     }
 }

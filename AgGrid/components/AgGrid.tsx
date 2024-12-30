@@ -94,6 +94,7 @@ const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupC
                 const dynamicColumnDefs: any = headers.map(header => ({
                     field: header,
                     aggFunc: aggFunc.includes(header) ? 'sum' : null,
+                    floatingFilter: true
                 }));
                 setColumnDefs(dynamicColumnDefs);
             }
