@@ -20,7 +20,7 @@ import '../css/grid.css'
 import { IInputs } from '../generated/ManifestTypes';
 import styled from 'styled-components';
 import { ExcelExportModule, LicenseManager } from 'ag-grid-enterprise';
-import { GridApi } from 'ag-grid-community';
+import { GridApi, ValueFormatterParams } from 'ag-grid-community';
 
 interface MyAgGridProps {
     inputData: string | null;
@@ -58,7 +58,46 @@ const Button = styled.button`
     }
     `;
 
-const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange}) => {
+    function currencyFormatter(params: ValueFormatterParams) {
+        const value = params.value;
+        if (isNaN(value)) {
+            return "";
+        }
+        if(value < 0) {
+            return '(' + Math.abs(value).toString() + ')';
+        } else {
+            return value.toString();
+        }
+    }
+
+    function amountComparator(value1: string, value2: string) {
+        const value1Number = amountToComparableNumber(value1);
+        const value2Number = amountToComparableNumber(value2);
+        if (value1Number === null && value2Number === null) {
+            return 0;
+        }
+        if (value1Number === null) {
+            return -1;
+        }
+        if (value2Number === null) {
+            return 1;
+        }
+
+        return value1Number - value2Number;
+    }
+
+    function amountToComparableNumber(amount: string) {
+        if (amount === null || amount === undefined || amount === '') {
+            return null;
+        }
+        if (amount.startsWith('(') && amount.endsWith(')')) {
+            return -1 * Number(amount.substring(1, amount.length - 1));
+        } else {
+            return Number(amount);
+        }
+    }
+
+    const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange}) => {
     console.log('AG Grid')
     const [divClass, setDivClass] = useState('ag-theme-alpine');
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -91,8 +130,15 @@ const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupC
 
                 const aggFunc: string[] = aggFuncColumns?.split(";") || [];
 
+                const columnTypes: any = {
+                    currency: {
+                        valueFormatter: currencyFormatter
+                    }
+                };
+                
                 const dynamicColumnDefs: any = headers.map(header => ({
                     field: header,
+                    type: header === 'Amount'? 'currency' : null,
                     aggFunc: aggFunc.includes(header) ? 'sum' : null,
                     floatingFilter: true
                 }));
@@ -138,10 +184,22 @@ const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupC
         },
         columnDefs: columnDefs,
         suppressAggFuncInHeader: true,
+        columnTypes: {
+            currency: {
+                flex: 1,
+                minWidth: 150,
+                filter: 'agNumberColumnFilter',
+                floatingFilter: true,
+                resizable: true,
+                editable: true,
+                valueFormatter: currencyFormatter,
+                comparator: amountComparator,
+            }
+        },
         defaultColDef: {
             flex: 1,
             minWidth: 150,
-            filter: true,
+            filter: 'agTextColumnFilter',
             floatingFilter: true,
             resizable: true,
             editable: true,
