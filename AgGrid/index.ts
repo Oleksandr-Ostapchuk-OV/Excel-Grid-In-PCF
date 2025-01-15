@@ -58,6 +58,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
         this.key = context.parameters.key.raw ?? 'defaultKey';
         LicenseManager.setLicenseKey(this.key);
+        // idea: add a new field to on data change to differentiate between dataverse save and a line break from user
         const onDataChange = (data: any) => {
             this.jsonData = data;
             this.notifyOutputChanged();

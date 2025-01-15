@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <manifest>
-  <control namespace="ACRAgGrid" constructor="AgGrid" version="1.7.0" display-name-key="ACR AgGrid" description-key="AG Grid customized for the ACR solution" control-type="standard" api-version="1.3.11">
+  <control namespace="ACRAgGrid" constructor="AgGrid" version="1.7.1" display-name-key="ACR AgGrid" description-key="AG Grid customized for the ACR solution" control-type="standard" api-version="1.3.11">
     <external-service-usage enabled="false"/>
     <property name="inputData" display-name-key="Input_Data" description-key="Input_Data" of-type="SingleLine.Text" usage="bound" required="true"/>
     <property name="enableRowGroupColumns" display-name-key="enableRowGroupColumns_Key" description-key="enableRowGroupColumns_Desc_Key" of-type="SingleLine.Text" usage="bound" required="true"/>
