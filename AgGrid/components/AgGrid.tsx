@@ -28,6 +28,7 @@ interface MyAgGridProps {
     pivotColumns: string | null;
     aggFuncColumns: string | null;
     onDataChange: (data: any) => void;
+    height: number;
 }
 
 const Button = styled.button`
@@ -97,7 +98,7 @@ const Button = styled.button`
         }
     }
 
-    const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange}) => {
+    const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange, height}) => {
     console.log('AG Grid')
     const [divClass, setDivClass] = useState('ag-theme-alpine');
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -235,9 +236,9 @@ const Button = styled.button`
         }
     };
 
-
+    
     return (
-        <div className={divClass} style={{ width: '100%', height: '80vh' }}>
+        <div className={divClass} style={{ height: `${height}px` }}>
             <Theme options={option} onSelect={handleThemeChange} />
             <Button onClick={onSave} style={{ margin: '10px' }}>Save to dataverse</Button>
             <AltButton onClick={onExcelExport} style={{ margin: '10px' }}>Export to Excel</AltButton>

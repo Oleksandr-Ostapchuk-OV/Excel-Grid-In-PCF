@@ -15,6 +15,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     private notifyOutputChanged: () => void;
     private jsonData: any[] = [];
     private key: string;
+    private gridHeight: number;
     /**
      * Empty constructor.
      */
@@ -39,6 +40,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         const height = context.mode.allocatedHeight;
         const width = context.mode.allocatedWidth;
 
+        this.gridHeight = context.parameters.gridHeight.raw ?? 500;
         this.inputData = context.parameters.inputData.raw;
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
@@ -58,6 +60,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
         this.key = context.parameters.key.raw ?? 'defaultKey';
         LicenseManager.setLicenseKey(this.key);
+        this.gridHeight = context.parameters.gridHeight.raw ?? 500;
         // idea: add a new field to on data change to differentiate between dataverse save and a line break from user
         const onDataChange = (data: any) => {
             this.jsonData = data;
@@ -65,7 +68,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         }
 
         createRoot.render(
-            React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns, onDataChange: onDataChange}),
+            React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns, onDataChange: onDataChange, height: this.gridHeight}),
             // React.createElement(MyAgGrid, {apiUrl : this.apiUrl}),
             this.con
         );

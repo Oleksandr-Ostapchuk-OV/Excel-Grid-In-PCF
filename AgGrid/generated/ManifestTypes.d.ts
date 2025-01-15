@@ -9,6 +9,7 @@ export interface IInputs {
     aggFuncColumns: ComponentFramework.PropertyTypes.StringProperty;
     jsonData: ComponentFramework.PropertyTypes.StringProperty;
     key: ComponentFramework.PropertyTypes.StringProperty;
+    gridHeight: ComponentFramework.PropertyTypes.DecimalNumberProperty;
 }
 export interface IOutputs {
     inputData?: string;
@@ -16,4 +17,5 @@ export interface IOutputs {
     aggFuncColumns?: string;
     jsonData?: string;
     key?: string;
+    gridHeight?: number;
 }
