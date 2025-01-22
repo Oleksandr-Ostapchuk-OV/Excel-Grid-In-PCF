@@ -16,6 +16,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     private jsonData: any[] = [];
     private key: string;
     private gridHeight: number;
+    private gridLock: string;
     /**
      * Empty constructor.
      */
@@ -40,6 +41,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         const height = context.mode.allocatedHeight;
         const width = context.mode.allocatedWidth;
 
+        this.gridLock = context.parameters.gridLock.raw ?? 'true';
         this.gridHeight = context.parameters.gridHeight.raw ?? 500;
         this.inputData = context.parameters.inputData.raw;
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
@@ -55,6 +57,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
      * @param context The entire property bag available to control via Context Object; It contains values as set up by the customizer mapped to names defined in the manifest, as well as utility functions
      */
     public updateView(context: ComponentFramework.Context<IInputs>): void {
+        this.gridLock = context.parameters.gridLock.raw ?? 'true';
         this.inputData = context.parameters.inputData.raw;
         this.enableRowGroupColumns = context.parameters.enableRowGroupColumns.raw;
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
@@ -68,7 +71,14 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         }
 
         createRoot.render(
-            React.createElement(MyAgGrid, {inputData : this.inputData,enableRowGroupColumns : this.enableRowGroupColumns,pivotColumns : this.pivotColumns,aggFuncColumns : this.aggFuncColumns, onDataChange: onDataChange, height: this.gridHeight}),
+            React.createElement(MyAgGrid, {inputData : this.inputData,
+                enableRowGroupColumns : this.enableRowGroupColumns,
+                pivotColumns : this.pivotColumns,
+                aggFuncColumns : this.aggFuncColumns,
+                onDataChange: onDataChange,
+                height: this.gridHeight,
+                gridLock: this.gridLock
+            }),
             // React.createElement(MyAgGrid, {apiUrl : this.apiUrl}),
             this.con
         );

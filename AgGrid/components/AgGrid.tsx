@@ -29,6 +29,7 @@ interface MyAgGridProps {
     aggFuncColumns: string | null;
     onDataChange: (data: any) => void;
     height: number;
+    gridLock: string;
 }
 
 const Button = styled.button`
@@ -45,7 +46,7 @@ const Button = styled.button`
     }
     `;
 
-    const AltButton = styled.button`
+const AltButton = styled.button`
     background-color: #9E9E9E; 
     color: white;
     padding: 5px 15px;
@@ -98,7 +99,7 @@ const Button = styled.button`
         }
     }
 
-    const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange, height}) => {
+    const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange, height, gridLock}) => {
     console.log('AG Grid')
     const [divClass, setDivClass] = useState('ag-theme-alpine');
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -192,7 +193,7 @@ const Button = styled.button`
                 filter: 'agNumberColumnFilter',
                 floatingFilter: true,
                 resizable: true,
-                editable: true,
+                editable: gridLock === 'true',
                 valueFormatter: currencyFormatter,
                 comparator: amountComparator,
             }
@@ -203,7 +204,7 @@ const Button = styled.button`
             filter: 'agTextColumnFilter',
             floatingFilter: true,
             resizable: true,
-            editable: true,
+            editable: gridLock === 'true',
         },
         enableRangeSelection: true,
         statusBar: {
@@ -240,7 +241,7 @@ const Button = styled.button`
     return (
         <div className={divClass} style={{ height: `${height}px` }}>
             <Theme options={option} onSelect={handleThemeChange} />
-            <Button onClick={onSave} style={{ margin: '10px' }}>Save to dataverse</Button>
+            {gridLock === 'true' && (<Button onClick={onSave} style={{ margin: '10px' }}>Save to dataverse</Button>)}
             <AltButton onClick={onExcelExport} style={{ margin: '10px' }}>Export to Excel</AltButton>
             < AgGridReact
                 rowData={rowData}

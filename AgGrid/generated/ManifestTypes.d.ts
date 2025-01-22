@@ -10,6 +10,7 @@ export interface IInputs {
     jsonData: ComponentFramework.PropertyTypes.StringProperty;
     key: ComponentFramework.PropertyTypes.StringProperty;
     gridHeight: ComponentFramework.PropertyTypes.DecimalNumberProperty;
+    gridLock: ComponentFramework.PropertyTypes.StringProperty;
 }
 export interface IOutputs {
     inputData?: string;
@@ -18,4 +19,5 @@ export interface IOutputs {
     jsonData?: string;
     key?: string;
     gridHeight?: number;
+    gridLock?: string;
 }
