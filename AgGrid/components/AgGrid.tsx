@@ -9,6 +9,7 @@
 
 import React, { useState, useEffect, useMemo, useRef} from 'react';
 import { AgGridReact } from 'ag-grid-react';
+import { ColDef } from 'ag-grid-community'; // Correct import for column definitions
 import 'ag-grid-community/styles/ag-grid.css'; // Core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Theme CSS
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -60,6 +61,16 @@ const AltButton = styled.button`
     }
     `;
 
+const InputContainer = styled.div`
+    display: flex; /* Use flexbox to align items in a row */
+    align-items: center; /* Center items vertically */
+`;
+
+const Input = styled.input`
+    width: 120px;  /* Set the width of the input field */
+    margin-right: 10px; /* Add margin to the right for spacing */
+`;
+
     function currencyFormatter(params: ValueFormatterParams) {
         const value = params.value;
         if (isNaN(value)) {
@@ -99,13 +110,43 @@ const AltButton = styled.button`
         }
     }
 
+    // -- Unique ID counter to avoid duplicates --
+    let splitCounter = 0;
+
+    /**
+     * Generates a unique FactRecID for the new row.
+     * Example: if the base is '8edc...', returns 'New-1-8edc...' the first time,
+     * then 'New-2-8edc...' the next time, etc.
+     */
+    
+    function getNextFactRecID(baseFactRecID: string): string {
+        splitCounter++;
+        // If it was already something like "New-5-xxx", remove the "New-5-" portion:
+        const base = baseFactRecID.replace(/^New-\d+-/, '');
+        return `New-${splitCounter}-${base}`;
+      }
+      /**
+         * If test mode is on and there's no "Original" record in Comments yet,
+         * store the original amount in the row's Comments field.
+         */
+    function storeOriginalAmountInComments(row: any, originalAmount: number) {
+        const testMode = true; // Set to false to disable
+        if (!testMode) return; // No action if testMode is off
+        const comments: string = row.Comments || '';
+        if (!comments.includes('Original:')) {
+          row.Comments = `Original: ${originalAmount}   ${comments}`;
+        } 
+      }
+
     const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange, height, gridLock}) => {
     console.log('AG Grid')
     const [divClass, setDivClass] = useState('ag-theme-alpine');
     const [selectedOption, setSelectedOption] = useState<string>('');
     const [rowData, setRowData] = useState<any[]>([]);
     const [autoDefName, setAutoDefName] = useState("athlete");
-    const [columnDefs, setColumnDefs] = useState([]);
+    // const [columnDefs, setColumnDefs] = useState([]); // removed to use ColDef type
+    const [transferAmount, setTransferAmount] = useState<number | null>(null);
+    const [columnDefs, setColumnDefs] = useState<ColDef[]>([]); // Specify type for columnDefs
     const gridRef = useRef<AgGridReact>(null);
     useEffect(() => {
         const fetchData = async () => {
@@ -137,19 +178,85 @@ const AltButton = styled.button`
                         valueFormatter: currencyFormatter
                     }
                 };
-                
                 const dynamicColumnDefs: any = headers.map(header => ({
                     field: header,
-                    type: header === 'Amount'? 'currency' : null,
+                    type: header === 'Amount' || header === 'Difference' ? 'currency' : null,
                     aggFunc: aggFunc.includes(header) ? 'sum' : null,
-                    floatingFilter: true
-                }));
+                    floatingFilter: true,
+                    cellClassRules: {
+                        'new-row': (params: { data: { FactRecID: string; }; }) => params.data.FactRecID.startsWith("New-") // Apply style if FactRecID starts with "New-"
+                    }
+                })); // Specify type for dynamicColumnDefs
                 setColumnDefs(dynamicColumnDefs);
             }
         }
         fetchData();
 
     }, [inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns])
+      
+    // Transfer amount to new row function
+    const transferAmountToNewRow = () => {
+        const selectedRows = gridRef.current?.api.getSelectedRows() ?? [];
+        if (selectedRows.length === 0) {
+          alert('Select a row first.');
+          return;
+        }
+        if (transferAmount == null || transferAmount === 0) {
+          alert('Enter a valid amount.');
+          return;
+        }
+  
+        const selectedRow = selectedRows[0];
+        const originalAmount = parseFloat(selectedRow.Amount);
+        let newSelectedRowAmount = originalAmount - transferAmount;
+  
+        // Check negative constraints
+        if (
+          (originalAmount < 0 && transferAmount < 0 && Math.abs(newSelectedRowAmount) > Math.abs(originalAmount)) ||
+          (originalAmount < 0 && transferAmount > 0 && newSelectedRowAmount > 0)
+        ) {
+          alert('Transfer exceeds balance.');
+          return;
+        }
+  
+        // Prepare updated row
+        const updatedRow = {
+          ...selectedRow,
+          Amount: newSelectedRowAmount.toFixed(2),
+        };
+  
+        // Prepare new row
+        const newRow = {
+          ...selectedRow,
+          Amount: transferAmount.toFixed(2),
+          FactRecID: getNextFactRecID(selectedRow.FactRecID),
+        };
+
+        storeOriginalAmountInComments(updatedRow, originalAmount);
+        storeOriginalAmountInComments(newRow, originalAmount);
+  
+        // Find rowNode to insert the new row right below
+        const rowNode = gridRef.current?.api.getRowNode(selectedRow.FactRecID);
+        if (!rowNode) return;
+  
+        // Update & Add
+        gridRef.current?.api.applyTransaction({
+          update: [updatedRow],
+          add: [newRow],
+          addIndex: rowNode.rowIndex !== null ? rowNode.rowIndex + 1 : undefined, // insert below
+        });
+        
+        
+        setTransferAmount(null);
+
+        // Lock the grid
+        // if (gridLock === 'false') {
+        //     setTimeout(() => {
+        //         gridLock = 'true';
+        //     }, 0);
+        // }
+      };
+
     const autoGroupColumnDef = useMemo(() => {
         return {
             minWidth: 270,
@@ -206,6 +313,7 @@ const AltButton = styled.button`
             resizable: true,
             editable: gridLock === 'true',
         },
+        getRowId: (params:any) => params.data.FactRecID, // Important for updates        
         enableRangeSelection: true,
         statusBar: {
             statusPanels: [
@@ -240,9 +348,22 @@ const AltButton = styled.button`
     
     return (
         <div className={divClass} style={{ height: `${height}px` }}>
+            <InputContainer>
             <Theme options={option} onSelect={handleThemeChange} />
             {gridLock === 'true' && (<Button onClick={onSave} style={{ margin: '10px' }}>Save to dataverse</Button>)}
-            <AltButton onClick={onExcelExport} style={{ margin: '10px' }}>Export to Excel</AltButton>
+            <AltButton onClick={onExcelExport} style={{ margin: '10px' }}>Export to Excel</AltButton>                      
+            {gridLock === 'true' && (<Input
+                type="number"
+                placeholder="Enter amount to transfer"
+                value={transferAmount !== null ? transferAmount: ""}
+                onChange={(e) => {
+                    const value = e.target.value; // Get the input value
+                    // Set transferAmount to null if the input is empty, otherwise parse it to a float
+                    setTransferAmount(value === "" ? null : parseFloat(value));
+                }}
+            />)}
+            {gridLock === 'true' && (<Button onClick={transferAmountToNewRow} style={{ margin: '10px' }}>Transfer Amount</Button>)}
+            </InputContainer>            
             < AgGridReact
                 rowData={rowData}
                 columnDefs={columnDefs}
@@ -257,7 +378,7 @@ const AltButton = styled.button`
                 ref={gridRef}
             />
         </div>
-    );
+    );   
 });
 
 export default AgGrid;

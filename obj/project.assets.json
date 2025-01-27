@@ -14,7 +14,7 @@
           "build/Microsoft.NETFramework.ReferenceAssemblies.net462.targets": {}
         }
       },
-      "Microsoft.PowerApps.MSBuild.Pcf/1.37.4": {
+      "Microsoft.PowerApps.MSBuild.Pcf/1.39.3": {
         "type": "package",
         "build": {
           "build/Microsoft.PowerApps.MSBuild.Pcf.props": {},
@@ -362,10 +362,10 @@
         "microsoft.netframework.referenceassemblies.net462.nuspec"
       ]
     },
-    "Microsoft.PowerApps.MSBuild.Pcf/1.37.4": {
-      "sha512": "4WR7+U2tWxbUkaCsDXisUJlQf1SjSd0Tg8wt5PBCArHRWd9Hig6XBac7szA1mAu36SOoFi9HOLjqM1HSEUpPIQ==",
+    "Microsoft.PowerApps.MSBuild.Pcf/1.39.3": {
+      "sha512": "e2G8i3msgP5ozcrcETyhYCNvArm4h0YijEeehymEMXNB+7o8fGWiVfayYNoRO6pYQUgAxh0yH+3ZH7qPEOflCw==",
       "type": "package",
-      "path": "microsoft.powerapps.msbuild.pcf/1.37.4",
+      "path": "microsoft.powerapps.msbuild.pcf/1.39.3",
       "files": [
         ".nupkg.metadata",
         ".signature.p7s",
@@ -373,7 +373,7 @@
         "LICENSE.txt",
         "build/Microsoft.PowerApps.MSBuild.Pcf.props",
         "build/Microsoft.PowerApps.MSBuild.Pcf.targets",
-        "microsoft.powerapps.msbuild.pcf.1.37.4.nupkg.sha512",
+        "microsoft.powerapps.msbuild.pcf.1.39.3.nupkg.sha512",
         "microsoft.powerapps.msbuild.pcf.nuspec",
         "tasks/Microsoft.PowerApps.MSBuild.Pcf.tasks",
         "tasks/net472/Microsoft.PowerPlatform.MSBuild.Telemetry.Tasks.dll",
@@ -460,19 +460,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\gwilli10\\.nuget\\packages\\": {}
+    "C:\\Users\\oostapch\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
+      "projectUniqueName": "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
       "projectName": "pcfaggrid",
-      "projectPath": "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
-      "packagesPath": "C:\\Users\\gwilli10\\.nuget\\packages\\",
-      "outputPath": "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\obj\\",
+      "projectPath": "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
+      "packagesPath": "C:\\Users\\oostapch\\.nuget\\packages\\",
+      "outputPath": "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\gwilli10\\AppData\\Roaming\\NuGet\\NuGet.Config"
+        "C:\\Users\\oostapch\\AppData\\Roaming\\NuGet\\NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "net462"

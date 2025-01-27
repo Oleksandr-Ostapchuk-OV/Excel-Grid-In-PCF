@@ -4,3 +4,12 @@
 /node_modules
 
 Power App inputs.txt
+
+/old
+
+/ACRAgGrid
+/obj
+
+obj/pcfaggrid.pcfproj.nuget.dgspec.json
+obj/pcfaggrid.pcfproj.nuget.g.props
+obj/pcfaggrid.pcfproj.nuget.g.targets

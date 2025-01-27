@@ -1,12 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "sHzYl5Yika4=",
+  "dgSpecHash": "t0qC7x9a2a2M9krF/22AZa3dJwHTRoGQuLbDKA0R9yk8/m34PTPOVW6ZJwqbsEwqpwr74Q7EGQLyWu1q8RARSQ==",
   "success": true,
-  "projectFilePath": "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
+  "projectFilePath": "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
   "expectedPackageFiles": [
-    "C:\\Users\\gwilli10\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
-    "C:\\Users\\gwilli10\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net462\\1.0.0\\microsoft.netframework.referenceassemblies.net462.1.0.0.nupkg.sha512",
-    "C:\\Users\\gwilli10\\.nuget\\packages\\microsoft.powerapps.msbuild.pcf\\1.37.4\\microsoft.powerapps.msbuild.pcf.1.37.4.nupkg.sha512"
+    "C:\\Users\\oostapch\\.nuget\\packages\\microsoft.netframework.referenceassemblies\\1.0.0\\microsoft.netframework.referenceassemblies.1.0.0.nupkg.sha512",
+    "C:\\Users\\oostapch\\.nuget\\packages\\microsoft.netframework.referenceassemblies.net462\\1.0.0\\microsoft.netframework.referenceassemblies.net462.1.0.0.nupkg.sha512",
+    "C:\\Users\\oostapch\\.nuget\\packages\\microsoft.powerapps.msbuild.pcf\\1.39.3\\microsoft.powerapps.msbuild.pcf.1.39.3.nupkg.sha512"
   ],
   "logs": []
 }

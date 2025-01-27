@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj": {}
+    "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj": {}
   },
   "projects": {
-    "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj": {
+    "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
+        "projectUniqueName": "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
         "projectName": "pcfaggrid",
-        "projectPath": "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
-        "packagesPath": "C:\\Users\\gwilli10\\.nuget\\packages\\",
-        "outputPath": "C:\\Local Files\\_Project Files\\Account Reconcil\\Excel PCF Control\\Excel-Grid-In-PCF\\obj\\",
+        "projectPath": "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\pcfaggrid.pcfproj",
+        "packagesPath": "C:\\Users\\oostapch\\.nuget\\packages\\",
+        "outputPath": "C:\\VM\\AG-Grid\\Excel-Grid-In-PCF\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\gwilli10\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\oostapch\\AppData\\Roaming\\NuGet\\NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "net462"
