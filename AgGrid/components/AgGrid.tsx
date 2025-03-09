@@ -130,7 +130,7 @@ const Input = styled.input`
          * store the original amount in the row's Comments field.
          */
     function storeOriginalAmountInComments(row: any, originalAmount: number) {
-        const testMode = true; // Set to false to disable
+        const testMode = false; // Set to false to disable
         if (!testMode) return; // No action if testMode is off
         const comments: string = row.Comments || '';
         if (!comments.includes('Original:')) {
@@ -249,12 +249,6 @@ const Input = styled.input`
         
         setTransferAmount(null);
 
-        // Lock the grid
-        // if (gridLock === 'false') {
-        //     setTimeout(() => {
-        //         gridLock = 'true';
-        //     }, 0);
-        // }
       };
 
     const autoGroupColumnDef = useMemo(() => {
@@ -300,7 +294,7 @@ const Input = styled.input`
                 filter: 'agNumberColumnFilter',
                 floatingFilter: true,
                 resizable: true,
-                editable: gridLock === 'true',
+                editable: gridLock === 'false',
                 valueFormatter: currencyFormatter,
                 comparator: amountComparator,
             }
@@ -353,13 +347,23 @@ const Input = styled.input`
             {gridLock === 'true' && (<Button onClick={onSave} style={{ margin: '10px' }}>Save to dataverse</Button>)}
             <AltButton onClick={onExcelExport} style={{ margin: '10px' }}>Export to Excel</AltButton>                      
             {gridLock === 'true' && (<Input
-                type="number"
+                type="text"
                 placeholder="Enter amount to transfer"
-                value={transferAmount !== null ? transferAmount: ""}
+                // value={transferAmount !== null ? transferAmount.toString() : ""}
                 onChange={(e) => {
-                    const value = e.target.value; // Get the input value
-                    // Set transferAmount to null if the input is empty, otherwise parse it to a float
-                    setTransferAmount(value === "" ? null : parseFloat(value));
+                    const value = e.target.value; // Get the input value                    
+                // Allow negative numbers, decimal points, and empty input
+                if (/^-?\d*\.?\d*$/.test(value)) {
+            
+                    // Allow empty input or valid number formats (including negative numbers).
+                    if (value === "" || value === "-" ||  value === ".") {
+                        setTransferAmount(null);
+                    } else {
+                        // Otherwise, parse it to a float
+                        setTransferAmount(parseFloat(value));
+                    }
+                }
+                
                 }}
             />)}
             {gridLock === 'true' && (<Button onClick={transferAmountToNewRow} style={{ margin: '10px' }}>Transfer Amount</Button>)}
