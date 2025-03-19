@@ -2,14 +2,14 @@
  * MyAgGridComponent.tsx
  * Description: React component for displaying data using Ag Grid in TypeScript - Modified for OVV account reconciliation uses
  * Author: Dixit Joshi
- * Modified by: Gabe Williams
+ * Modified by: Oleksandr Ostapchuk
  * Version: 1.2.0.1
  * License: MIT
  */
 
 import React, { useState, useEffect, useMemo, useRef} from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { ColDef } from 'ag-grid-community'; // Correct import for column definitions
+import { ColDef, CellValueChangedEvent } from 'ag-grid-community'; // Correct import for column definitions
 import 'ag-grid-community/styles/ag-grid.css'; // Core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Theme CSS
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -110,21 +110,6 @@ const Input = styled.input`
         }
     }
 
-    // -- Unique ID counter to avoid duplicates --
-    let splitCounter = 0;
-
-    /**
-     * Generates a unique FactRecID for the new row.
-     * Example: if the base is '8edc...', returns 'New-1-8edc...' the first time,
-     * then 'New-2-8edc...' the next time, etc.
-     */
-    
-    function getNextFactRecID(baseFactRecID: string): string {
-        splitCounter++;
-        // If it was already something like "New-5-xxx", remove the "New-5-" portion:
-        const base = baseFactRecID.replace(/^New-\d+-/, '');
-        return `New-${splitCounter}-${base}`;
-      }
       /**
          * If test mode is on and there's no "Original" record in Comments yet,
          * store the original amount in the row's Comments field.
@@ -148,6 +133,33 @@ const Input = styled.input`
     const [transferAmount, setTransferAmount] = useState<number | null>(null);
     const [columnDefs, setColumnDefs] = useState<ColDef[]>([]); // Specify type for columnDefs
     const gridRef = useRef<AgGridReact>(null);
+    const updateCounter = useRef(0); // Initialize updateCounter as a useRef
+    const splitCounter = useRef(0);
+    const alreadyUpdatedRows = useRef<Set<string>>(new Set());
+    
+    // Generates unique IDs for updated rows  
+    function getUpdatedFactRecID(baseFactRecID: string): string {
+        if (baseFactRecID.startsWith('New-') || baseFactRecID.startsWith('Updated-')) {
+            return baseFactRecID; // Preserve existing "New-" or "Updated-" IDs
+        }
+        updateCounter.current++; // Increment the updateCounter reference
+        // updateCounter++;
+        return `Updated-${updateCounter.current}-${baseFactRecID}`;
+    }
+
+    /**
+     * Generates a unique FactRecID for the new row.
+     * Example: if the base is '8edc...', returns 'New-1-8edc...' the first time,
+     * then 'New-2-8edc...' the next time, etc.
+     */
+    // -- Unique ID counter to avoid duplicates --
+    function getNextFactRecID(baseFactRecID: string): string {
+        splitCounter.current++;
+        // If it was already something like "New-5-xxx", remove the "New-5-" portion:
+        const base = baseFactRecID.replace(/^New-\d+-/, '');
+        return `New-${splitCounter.current}-${base}`;
+      }
+    
     useEffect(() => {
         const fetchData = async () => {
             let data: any = [];
@@ -178,21 +190,83 @@ const Input = styled.input`
                         valueFormatter: currencyFormatter
                     }
                 };
-                const dynamicColumnDefs: any = headers.map(header => ({
-                    field: header,
-                    type: header === 'Amount' || header === 'Difference' ? 'currency' : null,
-                    aggFunc: aggFunc.includes(header) ? 'sum' : null,
-                    floatingFilter: true,
-                    cellClassRules: {
-                        'new-row': (params: { data: { FactRecID: string; }; }) => params.data.FactRecID.startsWith("New-") // Apply style if FactRecID starts with "New-"
+                const dynamicColumnDefs: ColDef<any>[] = headers.map(header => {
+                    // Define common cellClassRules for all columns.
+                    const baseCol: ColDef<any> = {
+                        field: header,
+                        floatingFilter: true,
+                        cellClassRules: {
+                        'new-row': (params) => params.data.FactRecID?.startsWith("New-"),
+                        'updated-row': (params) => params.data.FactRecID?.startsWith("Updated-")
+                        }
+                    };
+
+                    // For the ServiceDate column, force text filtering and formatting.
+                    if (header === 'ServiceDate') {
+                        return {
+                        ...baseCol,
+                        filter: 'agTextColumnFilter',
+                        valueFormatter: (params: ValueFormatterParams<any, any>) => (params.value ? params.value.toString() : ''),
+                        valueParser: (params: any) => params.newValue
+                        };
                     }
-                })); // Specify type for dynamicColumnDefs
+
+                    // For currency columns.
+                    if (header === 'Amount' || header === 'Difference') {
+                        baseCol.type = 'currency';
+                    }
+
+                    // Set aggregation function if applicable.
+                    if (aggFunc.includes(header)) {
+                        baseCol.aggFunc = 'sum';
+                    }
+
+                    return baseCol;
+                    });
+                
+                // const dynamicColumnDefs: any = headers.map(header => ({
+                //     field: header,
+                //     type: header === 'Amount' || header === 'Difference' ? 'currency' : null,
+                //     aggFunc: aggFunc.includes(header) ? 'sum' : null,
+                //     floatingFilter: true,
+                //     cellClassRules: {
+                //         'new-row': (params: { data: { FactRecID: string; }; }) => 
+                //             params.data.FactRecID && params.data.FactRecID.startsWith("New-"),
+                //         'updated-row': (params: { data: { FactRecID: string; }; }) => 
+                //             params.data.FactRecID && params.data.FactRecID.startsWith("Updated-")
+                //     }
+                // })); // Specify type for dynamicColumnDefs
                 setColumnDefs(dynamicColumnDefs);
             }
         }
         fetchData();
 
     }, [inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns])
+
+    
+    // Automatically mark rows as updated on any cell value change
+      
+    const onCellValueChanged = (event: CellValueChangedEvent) => {
+        if (!event.data || !gridRef.current) return;
+        const api = gridRef.current.api;
+        const originalId = event.data.FactRecID;
+        // Якщо це звичайний рядок і ми його ще не оновлювали, оновлюємо FactRecID лише один раз
+        if (!originalId.startsWith('New-') && !originalId.startsWith('Updated-')) {
+          if (!alreadyUpdatedRows.current.has(originalId)) {
+            alreadyUpdatedRows.current.add(originalId);
+            const newUpdatedId = getUpdatedFactRecID(originalId);
+            const newData = { ...event.data, FactRecID: newUpdatedId };
+            api.applyTransaction({ update: [newData] });
+            setRowData(prevRowData =>
+              prevRowData.map(row =>
+                row.FactRecID === originalId ? newData : row
+              )
+            );
+          }
+        }
+        console.log("Row updated successfully:", event.data);
+      };
+
       
     // Transfer amount to new row function
     const transferAmountToNewRow = () => {
@@ -223,6 +297,7 @@ const Input = styled.input`
         const updatedRow = {
           ...selectedRow,
           Amount: newSelectedRowAmount.toFixed(2),
+          FactRecID: getUpdatedFactRecID(selectedRow.FactRecID), // Mark as updated
         };
   
         // Prepare new row
@@ -246,7 +321,15 @@ const Input = styled.input`
           addIndex: rowNode.rowIndex !== null ? rowNode.rowIndex + 1 : undefined, // insert below
         });
         
-        
+        setRowData(prevRowData => {
+            const index = prevRowData.findIndex(row => row.FactRecID === selectedRow.FactRecID);
+            if (index === -1) return prevRowData;
+    
+            const newRowData = [...prevRowData];
+            newRowData.splice(index, 1, updatedRow, newRow); // Replace the original row and insert new one below
+            return newRowData;
+        });
+
         setTransferAmount(null);
 
       };
@@ -325,18 +408,19 @@ const Input = styled.input`
         setDivClass(selectedOption);
     };
 
-    const onSave = () => {
-        if (gridRef.current && gridRef.current.api) {
-            const currentData: any[] = [];
-            gridRef.current.api.forEachNode((node) => currentData.push(node.data));
-            onDataChange(currentData);
-        }
-    };
-
     const onExcelExport = () => {
         if (gridRef.current && gridRef.current.api) {
             gridRef.current.api.exportDataAsExcel();
         }
+    };
+    const onSave = () => {
+        const dataToSave: any[] = [];
+        gridRef.current!.api.forEachNode(node => {
+            if (node.data.FactRecID.startsWith('New-') || node.data.FactRecID.startsWith('Updated-')) {
+                dataToSave.push(node.data);
+            }
+        });
+        onDataChange(dataToSave);
     };
 
     
@@ -380,6 +464,7 @@ const Input = styled.input`
                 pivotPanelShow='never'
                 tooltipShowDelay={500}
                 ref={gridRef}
+                onCellValueChanged={onCellValueChanged} 
             />
         </div>
     );   

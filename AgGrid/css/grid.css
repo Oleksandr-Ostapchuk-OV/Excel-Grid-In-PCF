@@ -63,5 +63,8 @@
   background-color: white;
 }
 .new-row {
-  background-color: #ffcccc; /* Light red background */
+  background-color: #ffe3e3; /* Light red background */
+}
+.updated-row {
+  background-color: #f6faff; /*  */
 }
