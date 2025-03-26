@@ -195,21 +195,61 @@ const Input = styled.input`
                     const baseCol: ColDef<any> = {
                         field: header,
                         floatingFilter: true,
-                        cellClassRules: {
-                        'new-row': (params) => params.data.FactRecID?.startsWith("New-"),
-                        'updated-row': (params) => params.data.FactRecID?.startsWith("Updated-")
-                        }
+                        // cellClassRules: {
+                        // 'new-row': (params) => params.data.FactRecID?.startsWith("New-"),
+                        // 'updated-row': (params) => params.data.FactRecID?.startsWith("Updated-")
+                        // }
                     };
 
                     // For the ServiceDate column, force text filtering and formatting.
                     if (header === 'ServiceDate') {
                         return {
-                        ...baseCol,
-                        filter: 'agTextColumnFilter',
-                        valueFormatter: (params: ValueFormatterParams<any, any>) => (params.value ? params.value.toString() : ''),
-                        valueParser: (params: any) => params.newValue
+                          ...baseCol,
+                          filter: 'agDateColumnFilter',
+                          cellEditor: 'agDateCellEditor',
+                          cellEditorParams: {
+                            dateFormat: 'yyyy-mm-dd'
+                          },
+                          // Format date as YYYY-MM-DD string
+                          valueFormatter: (params: ValueFormatterParams) => {
+                            if (!params.value) return '';
+                            
+                            // Check if it's a Date object
+                            if (params.value instanceof Date) {
+                              const year = params.value.getFullYear();
+                              const month = String(params.value.getMonth() + 1).padStart(2, '0');
+                              const day = String(params.value.getDate()).padStart(2, '0');
+                              return `${year}-${month}-${day}`;
+                            }
+                            
+                            // Otherwise return as is
+                            return params.value.toString();
+                          },
+                          // Convert the edited value to string in YYYY-MM-DD format
+                          valueParser: (params: any) => {
+                            if (params.newValue instanceof Date) {
+                              const year = params.newValue.getFullYear();
+                              const month = String(params.newValue.getMonth() + 1).padStart(2, '0');
+                              const day = String(params.newValue.getDate()).padStart(2, '0');
+                              return `${year}-${month}-${day}`;
+                            }
+                            return params.newValue;
+                          }
                         };
-                    }
+                      }
+                    // if (header === 'ServiceDate') {
+                    //     return {
+                    //     ...baseCol,
+                    //     filter: 'agDateColumnFilter',
+                    //     cellEditor: 'agDateCellEditor',
+                    //     cellEditorParams: {
+                    //         // Configure the date picker format
+                    //         dateFormat: 'yyyy-mm-dd'
+                    //       },
+                    //     valueFormatter: (params: ValueFormatterParams<any, any>) => (params.value ? params.value.toString() : ''),
+                    //     valueParser: (params: any) => params.newValue
+                    //     };
+                    // }
 
                     // For currency columns.
                     if (header === 'Amount' || header === 'Difference') {
