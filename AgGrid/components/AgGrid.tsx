@@ -9,7 +9,7 @@
 
 import React, { useState, useEffect, useMemo, useRef} from 'react';
 import { AgGridReact } from 'ag-grid-react';
-import { ColDef, CellValueChangedEvent } from 'ag-grid-community'; // Correct import for column definitions
+import { ColDef, CellValueChangedEvent, ValueGetterParams } from 'ag-grid-community'; // Correct import for column definitions
 import 'ag-grid-community/styles/ag-grid.css'; // Core CSS
 import 'ag-grid-community/styles/ag-theme-quartz.css'; // Theme CSS
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -83,7 +83,12 @@ const Input = styled.input`
         }
     }
 
-    function amountComparator(value1: string, value2: string) {
+    function amountComparator(value1: any, value2: any) {
+
+        if (typeof value1 === 'number' && typeof value2 === 'number') {
+            return value1 - value2;
+          }
+          
         const value1Number = amountToComparableNumber(value1);
         const value2Number = amountToComparableNumber(value2);
         if (value1Number === null && value2Number === null) {
@@ -254,6 +259,30 @@ const Input = styled.input`
                     // For currency columns.
                     if (header === 'Amount' || header === 'Difference') {
                         baseCol.type = 'currency';
+                        baseCol.valueGetter = (params: ValueGetterParams) => {
+                            const rawValue = params.data[header]; 
+                
+                            if (rawValue === null || rawValue === undefined || rawValue === '') {
+                                return null; 
+                            }              
+                            
+                            if (typeof rawValue === 'string') {
+                                if (rawValue.startsWith('(') && rawValue.endsWith(')')) {
+                                    
+                                    const numStr = rawValue.substring(1, rawValue.length - 1);
+                                    const num = parseFloat(numStr);
+                                    return isNaN(num) ? null : -num;
+                                } else {
+                                    
+                                    const num = parseFloat(rawValue);
+                                    return isNaN(num) ? null : num;
+                                }
+                            } else if (typeof rawValue === 'number') {
+                                 return rawValue; 
+                            }
+                
+                            return null; 
+                        };
                     }
 
                     // Set aggregation function if applicable.
