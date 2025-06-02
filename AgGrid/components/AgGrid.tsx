@@ -31,6 +31,7 @@ interface MyAgGridProps {
     onDataChange: (data: any) => void;
     height: number;
     gridLock: string;
+    configSettings: string | null;
 }
 
 const Button = styled.button`
@@ -128,7 +129,7 @@ const Input = styled.input`
         } 
       }
 
-    const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange, height, gridLock}) => {
+    const AgGrid: React.FC<MyAgGridProps> = React.memo(({ inputData, enableRowGroupColumns, pivotColumns, aggFuncColumns, onDataChange, height, gridLock, configSettings}) => {
     console.log('AG Grid')
     const [divClass, setDivClass] = useState('ag-theme-alpine');
     const [selectedOption, setSelectedOption] = useState<string>('');
@@ -141,6 +142,22 @@ const Input = styled.input`
     const updateCounter = useRef(0); // Initialize updateCounter as a useRef
     const splitCounter = useRef(0);
     const alreadyUpdatedRows = useRef<Set<string>>(new Set());
+    const [config, setConfig] = useState<any>({});
+    // Додаємо новий стан для збереження налаштувань колонок
+    const [columnState, setColumnState] = useState<any>(null);
+    
+    // Parse config settings
+    useEffect(() => {
+        if (configSettings) {
+            try {
+                const parsedConfig = JSON.parse(configSettings);
+                setConfig(parsedConfig);
+                console.log('Loaded config settings:', parsedConfig);
+            } catch (error) {
+                console.error('Error parsing config settings:', error);
+            }
+        }
+    }, [configSettings]);
     
     // Generates unique IDs for updated rows  
     function getUpdatedFactRecID(baseFactRecID: string): string {
@@ -492,13 +509,75 @@ const Input = styled.input`
         onDataChange(dataToSave);
     };
 
+    // Save column state to configSettings
+    const saveColumnState = () => {
+        if (gridRef.current && gridRef.current.api) {
+            const state = gridRef.current.api.getColumnState();
+            
+            // Create data structure with column state and updated rows
+            const configData = {
+                columnState: state,
+                updatedRows: [] // We'll leave the rows empty since we're just saving column state
+            };
+            
+            // Call the callback to update the parent component
+            onDataChange(configData);
+            
+            // No alert needed
+        }
+    };
+    
+    // We don't need the restore function anymore as you mentioned
+    
+    // No need to check localStorage on load either
+    // We will just use the provided configuration if it exists
+    useEffect(() => {
+        if (configSettings) {
+            try {
+                const parsedConfig = JSON.parse(configSettings);
+                setConfig(parsedConfig);
+                
+                // If there's column state in the config, apply it when grid is ready
+                if (parsedConfig.columnState && gridRef.current && gridRef.current.api) {
+                    gridRef.current.api.applyColumnState({
+                        state: parsedConfig.columnState,
+                        applyOrder: true
+                    });
+                }
+            } catch (error) {
+                console.error('Error parsing config settings:', error);
+            }
+        }
+    }, [configSettings]);
+    
+    // Handle grid ready event to apply column state
+    const onGridReady = (params: any) => {
+        if (config.columnState) {
+            params.api.applyColumnState({
+                state: config.columnState,
+                applyOrder: true
+            });
+        }
+    };
     
     return (
         <div className={divClass} style={{ height: `${height}px` }}>
             <InputContainer>
+            {/* Column state save button in English */}
+            <AltButton onClick={saveColumnState} style={{ margin: '10px' }}>Save Column Template</AltButton>
             <Theme options={option} onSelect={handleThemeChange} />
             {gridLock === 'true' && (<Button onClick={onSave} style={{ margin: '10px' }}>Save to dataverse</Button>)}
-            <AltButton onClick={onExcelExport} style={{ margin: '10px' }}>Export to Excel</AltButton>                      
+            <AltButton onClick={onExcelExport} style={{ margin: '10px' }}>Export to Excel</AltButton>
+            
+            
+            
+            {/* Display config value if exists - keep this part for debugging */}
+            {config.displayValue && (
+                <div style={{ margin: '10px', padding: '5px', backgroundColor: '#f0f0f0' }}>
+                    Config: {config.displayValue}
+                </div>
+            )}
+            
             {gridLock === 'true' && (<Input
                 type="text"
                 placeholder="Enter amount to transfer"
@@ -533,7 +612,8 @@ const Input = styled.input`
                 pivotPanelShow='never'
                 tooltipShowDelay={500}
                 ref={gridRef}
-                onCellValueChanged={onCellValueChanged} 
+                onCellValueChanged={onCellValueChanged}
+                onGridReady={onGridReady}
             />
         </div>
     );   

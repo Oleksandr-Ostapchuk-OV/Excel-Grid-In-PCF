@@ -11,6 +11,7 @@ export interface IInputs {
     key: ComponentFramework.PropertyTypes.StringProperty;
     gridHeight: ComponentFramework.PropertyTypes.DecimalNumberProperty;
     gridLock: ComponentFramework.PropertyTypes.StringProperty;
+    configSettings: ComponentFramework.PropertyTypes.StringProperty;
 }
 export interface IOutputs {
     inputData?: string;
@@ -20,4 +21,5 @@ export interface IOutputs {
     key?: string;
     gridHeight?: number;
     gridLock?: string;
+    configSettings?: string;
 }

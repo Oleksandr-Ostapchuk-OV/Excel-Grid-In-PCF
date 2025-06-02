@@ -17,6 +17,8 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
     private key: string;
     private gridHeight: number;
     private gridLock: string;
+    private configSettings: string | null;
+    private columnState: any = null;
     /**
      * Empty constructor.
      */
@@ -48,6 +50,7 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
         this.notifyOutputChanged = notifyOutputChanged;
         this.key = context.parameters.key.raw ?? 'defaultKey';
+        // this.configSettings = context.parameters.configSettings?.raw ?? '{}';
         LicenseManager.setLicenseKey(this.key);
     }
 
@@ -63,10 +66,23 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
         this.aggFuncColumns = context.parameters.aggFuncColumns.raw;
         this.key = context.parameters.key.raw ?? 'defaultKey';
         LicenseManager.setLicenseKey(this.key);
+        this.configSettings = (context.parameters as any).configSettings?.raw ?? '{}';
         this.gridHeight = context.parameters.gridHeight.raw ?? 500;
         // idea: add a new field to on data change to differentiate between dataverse save and a line break from user
         const onDataChange = (data: any) => {
-            this.jsonData = data;
+            // Check if data contains column state configuration
+            if (data && data.columnState) {
+                // If we received column configuration, save it to columnState
+                this.columnState = data.columnState;
+                
+                // If we also have updated rows, save them to jsonData
+                if (data.updatedRows) {
+                    this.jsonData = data.updatedRows;
+                }
+            } else {
+                // Regular data save (just rows)
+                this.jsonData = data;
+            }
             this.notifyOutputChanged();
         }
 
@@ -77,7 +93,8 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
                 aggFuncColumns : this.aggFuncColumns,
                 onDataChange: onDataChange,
                 height: this.gridHeight,
-                gridLock: this.gridLock
+                gridLock: this.gridLock,
+                configSettings: this.configSettings
             }),
             // React.createElement(MyAgGrid, {apiUrl : this.apiUrl}),
             this.con
@@ -86,10 +103,14 @@ export class AgGrid implements ComponentFramework.StandardControl<IInputs, IOutp
 
     /**
      * It is called by the framework prior to a control receiving new data.
-     * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as “bound” or “output”
+     * @returns an object based on nomenclature defined in manifest, expecting object[s] for property marked as "bound" or "output"
      */
     public getOutputs(): IOutputs {
-        return {jsonData: JSON.stringify(this.jsonData)};
+        // Return both jsonData and configSettings as outputs
+        return {
+            jsonData: JSON.stringify(this.jsonData),
+            configSettings: this.columnState ? JSON.stringify({columnState: this.columnState}) : '{}'
+        };
     }
 
     /**
